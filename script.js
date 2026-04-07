@@ -31,5 +31,8 @@ for (let i = 0; i < levelradios.length; i++) {
     levelRadios[i].disabled = true;
 }
 
-
 });
+
+
+//tells user result (too high, etc)
+guess = parseInt.document.getElementById("
