@@ -18,16 +18,15 @@ document.getElementById("playBtn").addEventListener("click", function(){
     }
 
 
-answer = Math.floor(Math.random() * range) + 1;
+    answer = Math.floor(Math.random() * range) + 1;
+    document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
+    document.getElemenetById("guess").value ="";
+    document.getElemenetById("guessBtn").disabled = false;
+    document.getElementById("giveUpBtn").disabled = false;
+    document.getElementById("playBtn").disabled = true;
 
-document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
-document.getElemenetById("guess").value ="";
-document.getElemenetById("guessBtn").disabled = false;
-document.getElementById("giveUpBtn").disabled = false;
-document.getElementById("PlayBtn").disabled = true;
-
-let levelRadios = document.getElementsByName("level");
-for (let i = 0; i < levelradios.length; i++) {
+    let levelRadios = document.getElementsByName("level");
+    for (let i = 0; i < levelRadios.length; i++) {
     levelRadios[i].disabled = true;
 }
 
@@ -35,4 +34,15 @@ for (let i = 0; i < levelradios.length; i++) {
 
 
 //tells user result (too high, etc)
-guess = parseInt.document.getElementById("
+document.getElementById("guessBtn").addEventListener("click", function() {
+let guess = parseInt(document.getElementById("guess").value);
+    if (guess<answer){
+    document.getElementById("msg").textContent = playerName + " , you are too low!"
+}
+    else if (guess>answer) {
+    document.getElementById("msg").textContent = playerName + " , you are too high!"
+}
+    else if (guess===answer) {
+    document.getElementById("msg").textContent = playerName + " , you are correct!"
+    }
+})
