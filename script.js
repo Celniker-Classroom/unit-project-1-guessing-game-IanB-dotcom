@@ -5,6 +5,10 @@ let totalWins = 0;
 let totalGuesses = 0;
 let scores = [];
 let range = 3;
+let startTime = 0;       
+let totalTime = 0;        
+let fastestTime = Infinity; 
+let totalGames = 0;       
 
 // Date and Time
 function time() {
@@ -42,39 +46,33 @@ document.getElementById("date").textContent = month + " " + day + Suffix(day) + 
 time();
 setInterval(time, 1000);
 
-
 //Player Name
 let playerName = prompt("Enter your name:");
 playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCase();
 
-
 document.getElementById("playBtn").addEventListener("click", function(){
     let radios = document.getElementsByName("level");
-    range = 3
+    range = 3;
     for (let i=0; i < radios.length; i++){
         if(radios[i].checked){
             range = parseInt(radios[i].value);
         }
     }
-
-
     answer = Math.floor(Math.random() * range) + 1;
     guessCount = 0;
+    startTime = new Date().getTime();  
     document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
     document.getElementById("guess").value ="";
-    document.getElementById("guessBtn").disabled = false;
-    document.getElementById("giveUpBtn").disabled = false;
-    document.getElementById("playBtn").disabled = false;
+    document.getElementById("guessBtn").disabled = false;  // fixed
+    document.getElementById("giveUpBtn").disabled = false; // fixed
+    document.getElementById("playBtn").disabled = true;
     let levelRadios = document.getElementsByName("level");
     for (let i = 0; i < levelRadios.length; i++){
-    levelRadios[i].disabled = false;
-
-}
-
+        levelRadios[i].disabled = true;
+    }
 });
 
 // leaderboard
-
 function updateLeaderboard(){
     let sorted = scores.slice().sort(function(a, b){ return a - b; });
     let items = document.getElementsByName("leaderboard");
@@ -87,47 +85,60 @@ function updateLeaderboard(){
     }
 }
 
+// timers
+function updateTimers(){                                        
+    let endTime = new Date().getTime();
+    let elapsed = (endTime - startTime) / 1000;
+    totalGames++;
+    totalTime += elapsed;
+    if (elapsed < fastestTime){
+        fastestTime = elapsed;
+    }
+    document.getElementById("fastest").textContent = "Fastest: " + fastestTime.toFixed(1) + "s";
+    document.getElementById("avgTime").textContent = "Avg Time: " + (totalTime / totalGames).toFixed(1) + "s";
+}
+
 //tells user result (too high, etc)
 document.getElementById("guessBtn").addEventListener("click", function() {
-let guess = parseInt(document.getElementById("guess").value);
-  guessCount++;
+    let guess = parseInt(document.getElementById("guess").value);
+    guessCount++;
     if (guess<answer){
-    document.getElementById("msg").textContent = playerName + " , you are too low and cold!"
+        document.getElementById("msg").textContent = playerName + " , you are too low and cold!"
         if (guess >= (answer - 2)) {
             document.getElementById("msg").textContent = playerName + " , you are too low, but you are hot!"
         }
         else if (guess >= (answer - 5)) {
             document.getElementById("msg").textContent = playerName + " , you are too low, but you are warm!"
         }
-}
+    }
     else if (guess>answer) {
-    document.getElementById("msg").textContent = playerName + " , you are too high and cold!"
+        document.getElementById("msg").textContent = playerName + " , you are too high and cold!"
         if (guess <= (answer + 2)) {
             document.getElementById("msg").textContent = playerName + " , you are too high, but you are hot!"
         }
         else if (guess <= (answer + 5)) {
             document.getElementById("msg").textContent = playerName + " , you are too high, but you are warm!"
         }
-}
+    }
     else {
-    document.getElementById("msg").textContent = playerName + " , you are correct!"
-    document.getElementById("guessBtn").disabled = true;
-    totalWins++;
-    totalGuesses += guessCount;
-    document.getElementById("wins").textContent = "Total Wins: " + totalWins;
-    updateButtons();
-    document.getElementById("guessBtn").disabled = true;
-    document.getElementById("giveUpBtn").disabled = true;
-    document.getElementById("giveUpBtn").disabled = false;
-
-    let avg = totalGuesses / totalWins;
-    document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
-      
-    scores.push(guessCount);
-    updateLeaderboard();
-}
-    
-})
+        document.getElementById("msg").textContent = playerName + " , you are correct!"
+        document.getElementById("guessBtn").disabled = true;
+        totalWins++;
+        totalGuesses += guessCount;
+        document.getElementById("wins").textContent = "Total Wins: " + totalWins;
+        document.getElementById("giveUpBtn").disabled = true;
+        document.getElementById("playBtn").disabled = false;
+        let levelRadios = document.getElementsByName("level");
+        for (let i = 0; i < levelRadios.length; i++){
+            levelRadios[i].disabled = false;
+        }
+        let avg = totalGuesses / totalWins;
+        document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
+        scores.push(guessCount);
+        updateTimers();       
+        updateLeaderboard();
+    }
+});
 
 document.getElementById("giveUpBtn").addEventListener("click", function() {
     totalWins++;
@@ -136,6 +147,7 @@ document.getElementById("giveUpBtn").addEventListener("click", function() {
     let avg = totalGuesses / totalWins;
     document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
     scores.push(range);
+    updateTimers();           
     updateLeaderboard();
     document.getElementById("msg").textContent = playerName + ", you gave up! The answer was " + answer;
     document.getElementById("guessBtn").disabled = true;
