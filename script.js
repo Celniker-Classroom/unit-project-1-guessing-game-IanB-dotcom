@@ -4,6 +4,7 @@ let guessCount = 0;
 let totalWins = 0;
 let totalGuesses = 0;
 let scores = [];
+let range = 3;
 
 // Date and Time
 function time() {
@@ -49,7 +50,7 @@ playerName = playerName.charAt(0).toUpperCase() + playerName.slice(1).toLowerCas
 
 document.getElementById("playBtn").addEventListener("click", function(){
     let radios = document.getElementsByName("level");
-    let range = 3
+    range = 3
     for (let i=0; i < radios.length; i++){
         if(radios[i].checked){
             range = parseInt(radios[i].value);
@@ -63,11 +64,11 @@ document.getElementById("playBtn").addEventListener("click", function(){
     document.getElementById("guess").value ="";
     document.getElementById("guessBtn").disabled = false;
     document.getElementById("giveUpBtn").disabled = false;
-    document.getElementById("playBtn").disabled = true;
-
+    document.getElementById("playBtn").disabled = false;
     let levelRadios = document.getElementsByName("level");
-    for (let i = 0; i < levelRadios.length; i++) {
-    levelRadios[i].disabled = true;
+    for (let i = 0; i < levelRadios.length; i++){
+    levelRadios[i].disabled = false;
+
 }
 
 });
@@ -108,7 +109,7 @@ let guess = parseInt(document.getElementById("guess").value);
             document.getElementById("msg").textContent = playerName + " , you are too high, but you are warm!"
         }
 }
-    else (guess===answer); {
+    else {
     document.getElementById("msg").textContent = playerName + " , you are correct!"
     document.getElementById("guessBtn").disabled = true;
     totalWins++;
@@ -129,5 +130,19 @@ let guess = parseInt(document.getElementById("guess").value);
 })
 
 document.getElementById("giveUpBtn").addEventListener("click", function() {
-    
-})
+    totalWins++;
+    totalGuesses += range;
+    document.getElementById("wins").textContent = "Total Wins: " + totalWins;
+    let avg = totalGuesses / totalWins;
+    document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
+    scores.push(range);
+    updateLeaderboard();
+    document.getElementById("msg").textContent = playerName + ", you gave up! The answer was " + answer;
+    document.getElementById("guessBtn").disabled = true;
+    document.getElementById("giveUpBtn").disabled = true;
+    document.getElementById("playBtn").disabled = false;
+    let levelRadios = document.getElementsByName("level");
+    for (let i = 0; i < levelRadios.length; i++){
+        levelRadios[i].disabled = false;
+    }
+});
