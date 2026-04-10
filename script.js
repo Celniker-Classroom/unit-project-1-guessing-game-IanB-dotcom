@@ -5,10 +5,10 @@ let totalWins = 0;
 let totalGuesses = 0;
 let scores = [];
 let range = 3;
-let startTime = 0;       
+let startTime = 0;   
 let totalTime = 0;        
 let fastestTime = Infinity; 
-let totalGames = 0;       
+let totalGames = 0;     
 
 // Date and Time
 function time() {
@@ -63,8 +63,8 @@ document.getElementById("playBtn").addEventListener("click", function(){
     startTime = new Date().getTime();  
     document.getElementById("msg").textContent = playerName + ", guess a number between 1 and " + range;
     document.getElementById("guess").value ="";
-    document.getElementById("guessBtn").disabled = false;  // fixed
-    document.getElementById("giveUpBtn").disabled = false; // fixed
+    document.getElementById("guessBtn").disabled = false;  
+    document.getElementById("giveUpBtn").disabled = false; 
     document.getElementById("playBtn").disabled = true;
     let levelRadios = document.getElementsByName("level");
     for (let i = 0; i < levelRadios.length; i++){
@@ -86,7 +86,7 @@ function updateLeaderboard(){
 }
 
 // timers
-function updateTimers(){                                        
+function updateTimers(){                                         
     let endTime = new Date().getTime();
     let elapsed = (endTime - startTime) / 1000;
     totalGames++;
@@ -135,7 +135,7 @@ document.getElementById("guessBtn").addEventListener("click", function() {
         let avg = totalGuesses / totalWins;
         document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
         scores.push(guessCount);
-        updateTimers();       
+        updateTimers();      
         updateLeaderboard();
     }
 });
@@ -147,7 +147,7 @@ document.getElementById("giveUpBtn").addEventListener("click", function() {
     let avg = totalGuesses / totalWins;
     document.getElementById("avgScore").textContent = "Average Score: " + avg.toFixed(1);
     scores.push(range);
-    updateTimers();           
+    updateTimers();          
     updateLeaderboard();
     document.getElementById("msg").textContent = playerName + ", you gave up! The answer was " + answer;
     document.getElementById("guessBtn").disabled = true;
