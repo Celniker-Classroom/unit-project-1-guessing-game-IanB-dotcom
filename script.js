@@ -135,7 +135,7 @@ document.getElementById("guessBtn").addEventListener("click", function() {
     }
     else {
         document.getElementById("msg").textContent = playerName + " , you are correct!"
-        document.body.style.backgroundColor = "powderblue";  
+        document.body.style.backgroundColor = "#aaf0c9";  
         document.getElementById("guessBtn").disabled = true;
         totalWins++;
         totalGuesses += guessCount;
